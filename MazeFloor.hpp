@@ -12,5 +12,6 @@ private:
     void updateSymbol();
 public:
     MazeFloor(FLOOR_TPYE type, bool isVisited);
+    bool visit();
 
 };
