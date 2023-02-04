@@ -4,7 +4,7 @@ void MazeEntity::setDisplaySymbol(char symbol) {
     displaySymbol = symbol;
 }
 
-void MazeEntity::setIsVisited(bool visit){
+void MazeEntity::setIsVisited(bool visit) {
     isVisited = visit;
 }
 
@@ -17,13 +17,13 @@ bool MazeEntity::getIsVisited() {
 }
 
 
-MazeEntity::MazeEntity(char symbol, bool solid, bool visited ) {
+MazeEntity::MazeEntity(char symbol, bool solid, bool visited) {
     displaySymbol = symbol;
     isSolid = solid;
     isVisited = visited;
 }
 
-std::ostream& operator << (std::ostream & os, const MazeEntity& e){
+std::ostream &operator<<(std::ostream &os, const MazeEntity &e) {
     std::string s;
-    return os << s+e.displaySymbol;
+    return os << s + e.displaySymbol;
 }

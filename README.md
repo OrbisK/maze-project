@@ -1,4 +1,4 @@
-# Grundlagen der Programmierung – WS22/23 
+# Grundlagen der Programmierung – WS22/23
 
 ## Aufgabe 18 Labyrinth
 
@@ -21,17 +21,19 @@ Wobei die erste Zahl die Höhe, die zweite Zahl die Breite, die dritte Zahl die 
 die vierte Zahl die Spalte des Startpunktes, die fünfte Zahl die Zeile des Zielpunktes, die
 sechste Zahl die Spalte des Zielpunktes angibt. Das Labyrinth selbst lässt sich also in einem
 zweidimensionalen Feld speichern.
+
 - Schreiben Sie ein Programm, das das Spielfeld einliest und auf dem Bildschirm ausgeben
-kann.
+  kann.
 - Zeichnen Sie in das Spielfeld den Standort des Spielers und, soweit der Spieler nicht dort
-steht, die Startposition und die Zielposition ein.
+  steht, die Startposition und die Zielposition ein.
 - Erlauben Sie einem Spieler uber Eingabe von `O`, `U`, `L`, `R` sowie den Zahlen `8`, `2`, `4`, `6`
-sich im Spielfeld zu bewegen. Nach einem Zug soll das neue Spielfeld ausgegeben werden.
-- Wenn der Spieler die Zielposition erreicht hat, soll sich das Programm die Anzahl der Züge ausgeben und dann automatisch beenden. 
+  sich im Spielfeld zu bewegen. Nach einem Zug soll das neue Spielfeld ausgegeben werden.
+- Wenn der Spieler die Zielposition erreicht hat, soll sich das Programm die Anzahl der Züge ausgeben und dann
+  automatisch beenden.
 - Beim Ablaufen des Spielfeldes soll jedes besuchte Feld mit einem `.` markiert werden.
 - Zählen Sie die Anzahl der Zuge und geben diese mit aus.
 - während des Spieles soll es möglich sein, den aktuellen Spielstand in eine Datei zu speichern
-und später wieder zu laden.
+  und später wieder zu laden.
 
->Achten Sie darauf, dass das Programm nicht nur das vorgegebene Labyrinth verwendet, sondern
-berucksichtigen Sie auch andere Fälle.
+> Achten Sie darauf, dass das Programm nicht nur das vorgegebene Labyrinth verwendet, sondern
+> berucksichtigen Sie auch andere Fälle.

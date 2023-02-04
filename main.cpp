@@ -2,11 +2,6 @@
 #include "MazeWall.hpp"
 #include "MazeFloor.hpp"
 #include "Maze.hpp"
-
-#include <fstream>
-#include <iostream>
-#include <filesystem>
-#include <algorithm>
 #include <vector>
 
 
@@ -20,10 +15,10 @@ int main() {
 
     std::vector<std::vector<MazeEntity>> m{
             {
-                    wall, wall, wall
+                    wall,         wall,         wall
             },
             {
-                    floor, floor, floor
+                    floor,        floor,        floor
             },
             {
                     floorVisited, floorVisited, floorVisited, wall
