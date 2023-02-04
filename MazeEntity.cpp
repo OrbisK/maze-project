@@ -12,8 +12,9 @@ bool MazeEntity::visit() {
     return true;
 }
 
-std::string MazeEntity::toString(){
-    return std::string(1, displaySymbol);;
+std::string MazeEntity::toString() const{
+    std::string s;
+    return s+displaySymbol;
 }
 
 MazeEntity::MazeEntity(char symbol, bool solid, bool visited ) {

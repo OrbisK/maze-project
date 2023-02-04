@@ -10,5 +10,5 @@ public:
     MazeEntity(char symbol, bool solid, bool visited);
     void setDisplaySymbol(char symbol);
     bool visit();
-    std::string toString();
+    std::string toString() const;
 };
