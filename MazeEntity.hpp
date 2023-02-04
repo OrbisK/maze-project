@@ -6,5 +6,9 @@ private:
     bool isSolid;
     char displaySymbol;
 public:
-    MazeEntity(char symbol, bool solid);
+    bool isVisited;
+    MazeEntity(char symbol, bool solid, bool visited);
+    void setDisplaySymbol(char symbol);
+    bool visit();
+    std::string toString();
 };

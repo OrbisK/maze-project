@@ -3,4 +3,4 @@ project(labyrinth)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(labyrinth main.cpp MazeEntity.hpp MazeEntity.cpp)
+add_executable(labyrinth main.cpp MazeEntity.hpp MazeEntity.cpp MazeWall.cpp MazeWall.hpp MazeFloor.cpp MazeFloor.hpp)

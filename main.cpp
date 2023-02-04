@@ -1,6 +1,11 @@
 #include <iostream>
-#include "MazeEntity.hpp"
+#include "MazeWall.hpp"
+#include "MazeFloor.hpp"
 
 int main() {
-    MazeEntity m ('*', true);
+    MazeWall wall;
+    MazeFloor floorVisited(FLOOR_TPYE::DEFAULT, true );
+    MazeFloor floor(FLOOR_TPYE::DEFAULT, false );
+
+    std::cout << wall.toString() << floorVisited.toString() << floor.toString();
 }
