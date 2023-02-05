@@ -3,7 +3,7 @@
 char DEFAULT_SYMBOL = ' ';
 char VISITED_SYMBOL = '.';
 char START_SYMBOL = 'S';
-char END_SYMBOL = 'E';
+char END_SYMBOL = 'O';
 
 
 void MazeFloor::updateSymbol() {

@@ -9,22 +9,24 @@ int main() {
     MazeWall wall;
     MazeFloor floorVisited(FLOOR_TPYE::DEFAULT, true);
     MazeFloor floor(FLOOR_TPYE::DEFAULT, false);
+    MazeFloor start(FLOOR_TPYE::START, false);
+    MazeFloor end(FLOOR_TPYE::END, false);
 
     floor.visit();
 
 
     std::vector<std::vector<MazeEntity>> m{
             {
-                    wall,         wall,         wall
+                    wall,         wall,         wall, start
             },
             {
-                    floor,        floor,        floor
+                    floor,        floor,        floor,  end
             },
             {
                     floorVisited, floorVisited, floorVisited, wall
             }
     };
 
-    Maze maze(m);
+    Maze maze(m, {1,2});
     std::cout << maze;
 }
