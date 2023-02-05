@@ -1,5 +1,8 @@
 #include "MazeEntity.hpp"
 
+#pragma once
+
+
 enum FLOOR_TPYE {
     DEFAULT,
     START,

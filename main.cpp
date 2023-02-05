@@ -17,16 +17,18 @@ int main() {
 
     std::vector<std::vector<MazeEntity>> m{
             {
-                    wall,         wall,         wall, start
+                    wall,         wall,         wall,         start
             },
             {
-                    floor,        floor,        floor,  end
+                    floor,        floor,        floor,        end
             },
             {
                     floorVisited, floorVisited, floorVisited, wall
             }
     };
+    std::tuple<int, int> pos = std::make_tuple(0,0);
+    Maze maze(m, pos);
+    maze.getPlayer().move(DOWN);
 
-    Maze maze(m, {1,2});
     std::cout << maze;
 }
