@@ -2,6 +2,7 @@
 #include "MazeWall.hpp"
 #include "MazeFloor.hpp"
 #include "Maze.hpp"
+#include "Game.hpp"
 #include <vector>
 
 
@@ -30,5 +31,5 @@ int main() {
     Maze maze(m, pos);
     maze.getPlayer().move(DOWN);
 
-    std::cout << maze;
+    Game g(maze);
 }

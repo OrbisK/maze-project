@@ -6,6 +6,8 @@ Maze::Maze(std::vector<std::vector<MazeEntity>> &m, std::tuple<int, int> &player
     maze = m;
 }
 
+Maze::Maze(Maze &m) = default;
+
 int Maze::getPlayerPositionX() {
     return player.getPositionX();
 }
