@@ -4,8 +4,7 @@
 
 class Game {
 public:
-    explicit Game();
-    void start();
+    static void start();
 private:
-    void clearSavedFiles();
+    static void clearSavedFiles();
 };

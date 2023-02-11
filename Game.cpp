@@ -5,7 +5,6 @@
 #include "Game.hpp"
 #include "InputHandler.hpp"
 
-Game::Game() = default;
 
 void Game::start() {
     MAIN_MENU_INPUT mainMenu = InputHandler::getMainMenuInput();
