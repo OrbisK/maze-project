@@ -20,12 +20,12 @@ Maze::Maze(std::vector<std::vector<MazeEntity *>> &e, Position &start, Position 
     }
 }
 
-int Maze::getPlayerPositionX() {
-    return player.getPositionX();
+int Maze::getPlayerPositionCol() {
+    return player.getPositionCol();
 }
 
-int Maze::getPlayerPositionY() {
-    return player.getPositionY();
+int Maze::getPlayerPositionRow() {
+    return player.getPositionRow();
 }
 
 std::vector<std::vector<MazeEntity *>> Maze::getEntities() {
@@ -41,9 +41,14 @@ std::ostream &operator<<(std::ostream &os, Maze &m) {
     for (std::vector<MazeEntity *> row: m.getEntities()) {
         int c = 0;
         for (auto entity: row) {
-            if (m.getPlayerPositionX() == c && m.getPlayerPositionY() == r) {
+            if (m.getPlayerPositionCol() == c && m.getPlayerPositionRow() == r) {
                 os << "X";
-            } else {
+            }else if(m.startPos.col == c && m.startPos.row == r){
+                os << "S";
+            }else if(m.endPos.col == c && m.endPos.row == r){
+                os << "E";
+            }
+            else {
                 os << entity;
             }
             c++;
@@ -57,6 +62,11 @@ std::ostream &operator<<(std::ostream &os, Maze &m) {
 void printLoadFromFileError(const std::string& message, const std::string& fileName, std::exception &e) {
     std::cout << "[FEHLER] " << message << " Bitte pruefen sie die eingelesene Datei: " << fileName << std::endl;
     std::cout << e.what() << std::endl;
+    exit(1);
+}
+
+void printLoadFromFileError(const std::string& message, const std::string& fileName) {
+    std::cout << "[FEHLER] " << message << " Bitte pruefen sie die eingelesene Datei: " << fileName << std::endl;
     exit(1);
 }
 
@@ -157,7 +167,9 @@ Maze Maze::loadFromFile(const std::string &fileName) {
                             rowData.push_back(new  MazeFloor(true));
                             break;
                         default:
-                            std::cout << "a";
+                            printLoadFromFileError(
+                                    "Im Labyrinth ist ein unbekanntest Zeichen",
+                                    fileName);
                             break;
                     }
                     colIndex++;

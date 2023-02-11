@@ -17,6 +17,5 @@ class InputHandler {
 private:
     static GAME_INPUT getGameInputByUserInput(char input);
 public:
-    InputHandler();
     static GAME_INPUT getGameInput();
 };

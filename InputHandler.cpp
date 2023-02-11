@@ -2,8 +2,6 @@
 #include<iostream>
 #include <vector>
 
-InputHandler::InputHandler() = default;
-
 GAME_INPUT InputHandler::getGameInputByUserInput(char input) {
     switch(input){
         case 'O':

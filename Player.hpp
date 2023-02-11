@@ -8,15 +8,20 @@ enum DIRECTION {
     RIGHT
 };
 
+struct Position {
+    int row;
+    int col;
+};
+
 class Player {
 private:
-    std::tuple<int, int> position;
-    void setPositionX(int x);
-    void setPositionY(int y);
+    Position position;
+    void setPositionCol(int x);
+    void setPositionRow(int y);
 public:
     Player(int x, int y);
-    std::tuple<int, int> getPosition();
-    int getPositionX();
-    int getPositionY();
+    Position getPosition();
+    int getPositionCol();
+    int getPositionRow();
     void move(DIRECTION d);
 };

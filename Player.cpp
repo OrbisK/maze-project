@@ -1,38 +1,35 @@
 #include "Player.hpp"
 
-Player::Player(int x, int y) {
-    position = std::make_tuple(x, y);
-}
+Player::Player(int col, int row): position({row, col}) {}
 
-std::tuple<int, int> Player::getPosition() {
+Position Player::getPosition() {
     return position;
 }
-void Player::setPositionX(int x) {
-    std::get<0>(position) = x;
+void Player::setPositionCol(int x) {
+    position.col = x;
 }
 
-void Player::setPositionY(int y) {
-    std::get<1>(position) = y;
+void Player::setPositionRow(int y) {
+    position.row = y;
 }
 
-int Player::getPositionX() {
-    return std::get<0>(position);
+int Player::getPositionCol() {
+    return position.col;
 }
 
-int Player::getPositionY() {
-    return std::get<1>(position);
+int Player::getPositionRow() {
+    return position.row;
 }
 
 void Player::move(DIRECTION d){
     switch(d){
         case DIRECTION::UP:
-            setPositionY(getPositionY()-1);
+            position.row -= 1;
         case DIRECTION::DOWN:
-            setPositionY(getPositionY()+1);
+            position.row += 1;
         case DIRECTION::LEFT:
-            setPositionX(getPositionX()-1);
+            position.col -= 1;
         case DIRECTION::RIGHT:
-            setPositionX(getPositionX()+1);
+            position.col += 1;
     }
 }
-
