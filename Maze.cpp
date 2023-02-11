@@ -49,7 +49,7 @@ std::ostream &operator<<(std::ostream &os, Maze &m) {
                 os << "E";
             }
             else {
-                os << entity;
+                entity->print();
             }
             c++;
         }

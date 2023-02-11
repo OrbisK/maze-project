@@ -1,36 +1,24 @@
 #include "MazeEntity.hpp"
+#include <iostream>
 
 void MazeEntity::setDisplaySymbol(char symbol) {
     displaySymbol = symbol;
-}
-
-void MazeEntity::setIsVisited(bool visit) {
-    isVisited = visit;
 }
 
 bool MazeEntity::getIsSolid() const {
     return isSolid;
 }
 
-bool MazeEntity::getIsVisited() const {
-    return isVisited;
+char MazeEntity::getDisplaySymbol() const {
+    return displaySymbol;
 }
 
-
-MazeEntity::MazeEntity(char symbol, bool solid, bool visited) {
-    displaySymbol = symbol;
-    isSolid = solid;
-    isVisited = visited;
+MazeEntity::MazeEntity(char symbol, bool solid) : displaySymbol(symbol), isSolid(solid) {
 }
+
+void MazeEntity::print() const{
+    std::cout << displaySymbol;
+}
+
 
 MazeEntity::~MazeEntity() = default;
-
-std::ostream &operator<<(std::ostream &os, const MazeEntity &e) {
-    std::string s;
-    return os << s + e.displaySymbol;
-}
-
-std::ostream &operator<<(std::ostream &os, const MazeEntity* e) {
-    std::string s;
-    return os << s + e->displaySymbol;
-}

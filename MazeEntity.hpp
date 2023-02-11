@@ -5,20 +5,13 @@
 class MazeEntity {
 private:
     bool isSolid;
-    bool isVisited;
     char displaySymbol;
 public:
     bool getIsSolid() const;
-
-    bool getIsVisited() const;
-
     void setDisplaySymbol(char symbol);
+    char getDisplaySymbol() const;
 
-    void setIsVisited(bool visit);
-
-    friend std::ostream &operator<<(std::ostream &os, const MazeEntity &e);
-    friend std::ostream &operator<<(std::ostream &os, const MazeEntity* e);
-
-    MazeEntity(char symbol, bool solid, bool visited);
+    virtual void print() const;
+    MazeEntity(char symbol, bool solid);
     virtual  ~MazeEntity();
 };

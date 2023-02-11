@@ -1,5 +1,5 @@
 #include "MazeWall.hpp"
 
-MazeWall::MazeWall() : MazeEntity(WALL_SYMBOL, true, false) {
+MazeWall::MazeWall() : MazeEntity(WALL_SYMBOL, true) {
 
 }
