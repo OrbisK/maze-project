@@ -1,12 +1,16 @@
 #include "Maze.hpp"
-#include<iostream>
+#include "MazeWall.hpp"
+#include "MazeFloor.hpp"
 #include<tuple>
+#include <fstream>
+#include <sstream>
+#include <string>
+#include <iostream>
 
-Maze::Maze(std::vector<std::vector<MazeEntity>> &m, std::tuple<int, int> &playerPosition): player(std::get<0>(playerPosition), std::get<1>(playerPosition)) {
-    maze = m;
-}
+Maze::Maze(std::vector<std::vector<MazeEntity *>> &e, Position &start, Position &end) : player(
+        start.col, start.row), startPos(start), endPos(end), entities(e) {}
 
-Maze::Maze(Maze &m) = default;
+//Maze::Maze(Maze &m) = default;
 
 int Maze::getPlayerPositionX() {
     return player.getPositionX();
@@ -16,19 +20,19 @@ int Maze::getPlayerPositionY() {
     return player.getPositionY();
 }
 
-std::vector<std::vector<MazeEntity>> Maze::getMaze() {
-    return maze;
+std::vector<std::vector<MazeEntity *>> Maze::getEntities() {
+    return entities;
 }
 
-Player& Maze::getPlayer() {
+Player &Maze::getPlayer() {
     return player;
 }
 
 std::ostream &operator<<(std::ostream &os, Maze &m) {
     int r = 0;
-    for (const std::vector<MazeEntity> &row: m.getMaze()) {
+    for (std::vector<MazeEntity *> row: m.getEntities()) {
         int c = 0;
-        for (const MazeEntity &entity: row) {
+        for (auto entity: row) {
             if (m.getPlayerPositionX() == c && m.getPlayerPositionY() == r) {
                 os << "X";
             } else {
@@ -41,4 +45,126 @@ std::ostream &operator<<(std::ostream &os, Maze &m) {
     }
     return os;
 };
+
+void printLoadFromFileError(std::string message, std::string fileName, std::exception &e) {
+    std::cout << "[FEHLER] " << message << " Bitte pruefen sie die eingelesene Datei: " << fileName << std::endl;
+    std::cout << e.what() << std::endl;
+    exit(1);
+}
+
+void printLoadFromFileWarning(std::string message, std::string fileName) {
+    std::cout << "[Warnung] " << message << " Bitte pruefen sie die eingelesene Datei: " << fileName << std::endl;
+}
+
+
+Maze Maze::loadFromFile(const std::string &fileName) {
+
+    std::ifstream file(fileName);
+    std::string row;
+    int lineNumber = 1;
+    int mazeRow = 0;
+    Dimension dimensions{};
+    Position startPoint{};
+    Position endPoint{};
+
+    std::vector<std::vector<MazeEntity *>> data;
+
+    while (file) {
+        if(file.eof()){
+            break;
+        }
+        std::getline(file, row); // read each line into a string
+        switch (lineNumber) {
+            case 1: {
+                try {
+                    int height = std::stoi(row.substr(0, row.find(' ')));
+                    int width = std::stoi(row.substr(row.find(' ')));
+                    if (width <= 0 || height <= 0) {
+                        throw std::invalid_argument("Dimensionen duerfen nicht kleiner als 1 sein.");
+                    }
+                    dimensions.height = height;
+                    dimensions.width = width;
+                } catch (std::invalid_argument &e) {
+                    printLoadFromFileError("Beim Einlesen der Labyrinthdimensionen ist ein Fehler aufgetreten.",
+                                           fileName, e);
+                }
+                break;
+            }
+            case 2: {
+                try {
+                    int startY = std::stoi(row.substr(0, row.find(' ')));
+                    int startX = std::stoi(row.substr(row.find(' ')));
+                    if (startX < 0 || startY < 0 || startY > dimensions.height ||
+                        startX > dimensions.width) {
+                        throw std::invalid_argument("Startpunkt darf nicht ausserhalb des Labyrinthes liegen.");
+                    }
+                    startPoint.row = startY;
+                    startPoint.col = startX;
+                } catch (std::invalid_argument &e) {
+                    printLoadFromFileError("Beim Einlesen des Startpunktes ist ein Fehler aufgetreten.", fileName, e);
+                }
+                break;
+            }
+            case 3: {
+                try {
+                    int endY = std::stoi(row.substr(0, row.find(' ')));
+                    int endX = std::stoi(row.substr(row.find(' ')));
+                    if (endX < 0 || endY < 0 || endY > dimensions.height || endX > dimensions.width) {
+                        throw std::invalid_argument("Endpunkt darf nicht ausserhalb des Labyrinthes liegen.");
+                    }
+                    endPoint.row = endY;
+                    endPoint.col = endX;
+                } catch (std::invalid_argument &e) {
+                    printLoadFromFileError("Beim Einlesen des Endpunktes ist ein Fehler aufgetreten.",
+                                           fileName, e);
+                }
+                break;
+            }
+            default:
+                std::vector<MazeEntity *> rowData;
+                int mazeRowNumber = lineNumber - 3;
+                if (mazeRowNumber> dimensions.height) {
+                    printLoadFromFileWarning(
+                            "Alle Zeilen des Labyrinths, die größer als die vorgegebenen Zeilenanzahl sind werden ignoriert.",
+                            fileName);
+                    break;
+                }
+
+                int colIndex = 0;
+                for (char entity: row) {
+                    if(colIndex + 1 > dimensions.width){
+                        printLoadFromFileWarning(
+                                "Alle Spalten des Labyrinths, die groeßer als die vorgegebenen Spaltenanzahl sind werden ignoriert.",
+                                fileName);
+                        break;
+                    }
+                    switch (entity) {
+                        case WALL_SYMBOL:
+                            rowData.push_back(new MazeWall);
+                            break;
+                        case FLOOR_DEFAULT_SYMBOL:
+                            rowData.push_back(new MazeFloor(false));
+                            break;
+                        case FLOOR_VISITED_SYMBOL:
+                            rowData.push_back(new  MazeFloor(true));
+                            break;
+                        default:
+                            std::cout << "a";
+                            break;
+                    }
+                    colIndex++;
+                }
+
+                while(rowData.size() < dimensions.width){
+                    rowData.push_back(new MazeFloor(false));
+                }
+                data.push_back(rowData);
+                mazeRow++;
+                break;
+        }
+        lineNumber++;
+    }
+
+    return Maze(data, startPoint, endPoint);
+}
 

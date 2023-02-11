@@ -1,23 +1,14 @@
 #include "MazeEntity.hpp"
-
 #pragma once
 
+const char FLOOR_DEFAULT_SYMBOL = ' ';
+const char FLOOR_VISITED_SYMBOL = '.';
 
-enum FLOOR_TPYE {
-    DEFAULT,
-    START,
-    END
-};
 
 class MazeFloor : public MazeEntity {
 private:
-    FLOOR_TPYE type;
-
-    void updateSymbol();
-
 public:
-    MazeFloor(FLOOR_TPYE type, bool isVisited);
-
+    explicit MazeFloor(bool isVisited);
     bool visit();
 
 };
