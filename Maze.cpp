@@ -8,9 +8,17 @@
 #include <iostream>
 
 Maze::Maze(std::vector<std::vector<MazeEntity *>> &e, Position &start, Position &end) : player(
-        start.col, start.row), startPos(start), endPos(end), entities(e) {}
+        start.col, start.row), startPos(start), endPos(end), entities(e) {
+    if(entities[start.row][start.col]->getIsSolid() || entities[end.row][end.col]->getIsSolid()){
+        std::cout << "Start und/oder Ende darf nicht auf einem nicht betretbaren Entry liegen.";
+        exit(1);
+    }
 
-//Maze::Maze(Maze &m) = default;
+    if(start.col == end.col && start.row == end.row){
+        std::cout << "Start und Ende duerfen nicht uebereinander liegen.";
+        exit(1);
+    }
+}
 
 int Maze::getPlayerPositionX() {
     return player.getPositionX();
@@ -46,13 +54,13 @@ std::ostream &operator<<(std::ostream &os, Maze &m) {
     return os;
 };
 
-void printLoadFromFileError(std::string message, std::string fileName, std::exception &e) {
+void printLoadFromFileError(const std::string& message, const std::string& fileName, std::exception &e) {
     std::cout << "[FEHLER] " << message << " Bitte pruefen sie die eingelesene Datei: " << fileName << std::endl;
     std::cout << e.what() << std::endl;
     exit(1);
 }
 
-void printLoadFromFileWarning(std::string message, std::string fileName) {
+void printLoadFromFileWarning(const std::string& message, const std::string& fileName) {
     std::cout << "[Warnung] " << message << " Bitte pruefen sie die eingelesene Datei: " << fileName << std::endl;
 }
 
@@ -125,7 +133,7 @@ Maze Maze::loadFromFile(const std::string &fileName) {
                 int mazeRowNumber = lineNumber - 3;
                 if (mazeRowNumber> dimensions.height) {
                     printLoadFromFileWarning(
-                            "Alle Zeilen des Labyrinths, die größer als die vorgegebenen Zeilenanzahl sind werden ignoriert.",
+                            "Alle Zeilen des Labyrinths, die groesser als die vorgegebenen Zeilenanzahl sind werden ignoriert.",
                             fileName);
                     break;
                 }
@@ -134,7 +142,7 @@ Maze Maze::loadFromFile(const std::string &fileName) {
                 for (char entity: row) {
                     if(colIndex + 1 > dimensions.width){
                         printLoadFromFileWarning(
-                                "Alle Spalten des Labyrinths, die groeßer als die vorgegebenen Spaltenanzahl sind werden ignoriert.",
+                                "Alle Spalten des Labyrinths, die groesser als die vorgegebenen Spaltenanzahl sind werden ignoriert.",
                                 fileName);
                         break;
                     }
