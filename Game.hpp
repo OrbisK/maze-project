@@ -4,7 +4,8 @@
 
 class Game {
 public:
-    Game(Maze &maze);
+    explicit Game();
+    void start();
 private:
-    Maze maze;
+    void clearSavedFiles();
 };
