@@ -53,40 +53,52 @@ void Game::clearSavedFiles() {
 
 }
 
-void Game::playLevel(Maze &maze) {
+bool Game::playLevel(Maze &maze) {
     bool levelEnded = false;
+    std::cout << maze;
     while (!levelEnded) {
-        std::cout << maze;
         GAME_INPUT choice = InputHandler::getGameInput();
-            switch (choice) {
-                case GAME_INPUT::PLAYER_MOVE_RIGHT:
-                    maze.movePlayer(DIRECTION::RIGHT);
-                    break;
-                case GAME_INPUT::PLAYER_MOVE_LEFT:
-                    maze.movePlayer(DIRECTION::LEFT);
-                    break;
-                case GAME_INPUT::PLAYER_MOVE_UP:
-                    maze.movePlayer(DIRECTION::UP);
-                    break;
-                case GAME_INPUT::PLAYER_MOVE_DOWN:
-                    maze.movePlayer(DIRECTION::DOWN);
-                    break;
-                default:
-                    break;
-            }
+        switch (choice) {
+            case GAME_INPUT::PLAYER_MOVE_RIGHT:
+                levelEnded = maze.movePlayer(DIRECTION::RIGHT);
+                break;
+            case GAME_INPUT::PLAYER_MOVE_LEFT:
+                levelEnded = maze.movePlayer(DIRECTION::LEFT);
+                break;
+            case GAME_INPUT::PLAYER_MOVE_UP:
+                levelEnded = maze.movePlayer(DIRECTION::UP);
+                break;
+            case GAME_INPUT::PLAYER_MOVE_DOWN:
+                levelEnded = maze.movePlayer(DIRECTION::DOWN);
+                break;
+            case GAME_INPUT::SAVE_GAME:
+            default:
+                return false;
+        }
+        std::cout << maze;
     }
+    return true;
 }
 
 void Game::restart() {
     clearSavedFiles();
     int level = 1;
+    int movesCount = 0;
+    bool levelFinished = false;
     while (levelExists(level, false)) {
-        Maze maze = Maze::loadFromFile(getLevelPath(level, false));
-        playLevel(maze);
+        Maze maze = Maze::loadFromFile(getLevelPath(level, false), movesCount);
+        levelFinished = playLevel(maze);
+        movesCount += maze.getMovesCount();
+        if(levelFinished){
+            std::cout << "Level gewonnen" << std::endl;
+        }else{
+            return Game::save(maze, level, movesCount);
+        }
         level++;
     }
 }
 
-void Game::save() {
+void Game::save(Maze& maze, int level, int movesCount) {
+    std::cout << movesCount;
     // save moves count. save last unfinished level
 }

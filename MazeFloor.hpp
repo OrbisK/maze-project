@@ -12,4 +12,5 @@ public:
     explicit MazeFloor(bool isVisited);
     bool getIsVisited() const;
     void print() const override;
+    void visit();
 };

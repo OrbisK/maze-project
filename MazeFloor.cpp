@@ -16,3 +16,6 @@ void MazeFloor::print() const {
     MazeEntity::print();
 }
 
+void MazeFloor::visit(){
+    isVisited = true;
+}

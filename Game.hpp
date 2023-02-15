@@ -8,6 +8,6 @@ public:
 private:
     static void clearSavedFiles();
     static void restart();
-    static void save();
-    static void playLevel(Maze& maze);
+    static void save(Maze& maze, int level, int movesCount);
+    static bool playLevel(Maze& maze);
 };

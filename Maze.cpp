@@ -6,7 +6,13 @@
 #include <string>
 #include <iostream>
 
-Maze::Maze(std::vector<std::vector<MazeEntity *>> &e, Position &start, Position &end) : player(
+template<typename Base, typename T>
+inline bool instanceof(const T *ptr) {
+    return dynamic_cast<const Base*>(ptr) != nullptr;
+}
+
+Maze::Maze(std::vector<std::vector<MazeEntity *>> &e, Position &start, Position &end, int initialMovesCount = 0)
+        : movesCount(initialMovesCount), player(
         start.col, start.row), startPos(start), endPos(end), entities(e) {
     if (entities[start.row][start.col]->getIsSolid() || entities[end.row][end.col]->getIsSolid()) {
         std::cout << "Start und/oder Ende darf nicht auf einem nicht betretbaren Entry liegen.";
@@ -19,12 +25,20 @@ Maze::Maze(std::vector<std::vector<MazeEntity *>> &e, Position &start, Position 
     }
 }
 
+Position Maze::getPlayerPosition() {
+    return player.getPosition();
+}
+
 int Maze::getPlayerPositionCol() {
     return player.getPositionCol();
 }
 
 int Maze::getPlayerPositionRow() {
     return player.getPositionRow();
+}
+
+int Maze::getMovesCount() {
+    return movesCount;
 }
 
 std::vector<std::vector<MazeEntity *>> Maze::getEntities() {
@@ -39,29 +53,36 @@ MazeEntity *Maze::getMazeEntityByPosition(Position position) {
     return entities.at(position.row).at(position.col);
 }
 
-void Maze::movePlayer(DIRECTION direction) {
+bool Maze::positionIsEnd(Position p) const {
+    return p.col == endPos.col && p.row == endPos.row;
+}
+
+bool Maze::movePlayer(DIRECTION direction) {
     MazeEntity *entity;
+    Position position{};
     try {
         switch (direction) {
             case DIRECTION::RIGHT:
-                entity = getMazeEntityByPosition({getPlayerPositionRow(), getPlayerPositionCol() + 1});
+                position = {getPlayerPositionRow(), getPlayerPositionCol() + 1};
                 break;
             case DIRECTION::LEFT:
-                entity = getMazeEntityByPosition({getPlayerPositionRow(), getPlayerPositionCol() -1});
+                position = {getPlayerPositionRow(), getPlayerPositionCol() - 1};
                 break;
             case DIRECTION::UP:
-                entity = getMazeEntityByPosition({getPlayerPositionRow()-1, getPlayerPositionCol()});
+                position = {getPlayerPositionRow() - 1, getPlayerPositionCol()};
                 break;
             case DIRECTION::DOWN:
-                entity = getMazeEntityByPosition({getPlayerPositionRow()+1, getPlayerPositionCol()});
+                position = {getPlayerPositionRow() + 1, getPlayerPositionCol()};
                 break;
         }
-        if(!entity->getIsSolid()){
+        entity = getMazeEntityByPosition(position);
+        if (!entity->getIsSolid()) {
+            dynamic_cast<MazeFloor*>(entity)->visit();
+            movesCount++;
             player.move(direction);
         }
-    }catch (std::out_of_range &ofRange) {
-        return;
-    }
+    } catch (std::out_of_range &) {}
+    return positionIsEnd(position);
 }
 
 void printLoadFromFileError(const std::string &message, const std::string &fileName, std::exception &e) {
@@ -142,8 +163,7 @@ std::vector<MazeEntity *> parseMazeRow(const std::string &row, Dimension dimensi
     return rowData;
 }
 
-Maze Maze::loadFromFile(const std::string &filename) {
-
+Maze Maze::loadFromFile(const std::string &filename, int initialMoves = 0) {
     std::ifstream file(filename);
     std::string row;
     int lineNumber = 1;
@@ -203,7 +223,7 @@ Maze Maze::loadFromFile(const std::string &filename) {
         lineNumber++;
     }
 
-    return Maze(data, startPoint, endPoint);
+    return Maze(data, startPoint, endPoint, initialMoves);
 }
 
 std::ostream &operator<<(std::ostream &os, Maze &m) {
