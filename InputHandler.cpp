@@ -1,7 +1,6 @@
 #include "InputHandler.hpp"
 #include<iostream>
 #include <vector>
-#include <tuple>
 
 GAME_INPUT InputHandler::getGameInputByUserInput(char input) {
     switch(input){

@@ -22,6 +22,6 @@ public:
     Player& getPlayer();
     int getPlayerPositionCol();
     int getPlayerPositionRow();
-//    void saveToFile(const std::string& file_name);
-    static Maze loadFromFile(const std::string& file_name);
+//    void saveToFile(const std::string& filename);
+    static Maze loadFromFile(const std::string& filename);
 };
