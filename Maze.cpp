@@ -35,6 +35,35 @@ Player &Maze::getPlayer() {
     return player;
 }
 
+MazeEntity *Maze::getMazeEntityByPosition(Position position) {
+    return entities.at(position.row).at(position.col);
+}
+
+void Maze::movePlayer(DIRECTION direction) {
+    MazeEntity *entity;
+    try {
+        switch (direction) {
+            case DIRECTION::RIGHT:
+                entity = getMazeEntityByPosition({getPlayerPositionRow(), getPlayerPositionCol() + 1});
+                break;
+            case DIRECTION::LEFT:
+                entity = getMazeEntityByPosition({getPlayerPositionRow(), getPlayerPositionCol() -1});
+                break;
+            case DIRECTION::UP:
+                entity = getMazeEntityByPosition({getPlayerPositionRow()-1, getPlayerPositionCol()});
+                break;
+            case DIRECTION::DOWN:
+                entity = getMazeEntityByPosition({getPlayerPositionRow()+1, getPlayerPositionCol()});
+                break;
+        }
+        if(!entity->getIsSolid()){
+            player.move(direction);
+        }
+    }catch (std::out_of_range &ofRange) {
+        return;
+    }
+}
+
 void printLoadFromFileError(const std::string &message, const std::string &fileName, std::exception &e) {
     std::cout << "[FEHLER] " << message << " Bitte pruefen sie die eingelesene Datei: " << fileName << std::endl;
     std::cout << e.what() << std::endl;
@@ -59,7 +88,7 @@ Dimension parseDimensions(const std::string &row) {
     return {width, height};
 }
 
-Position parseStartPosition(const std::string &row, Dimension dimensions){
+Position parseStartPosition(const std::string &row, Dimension dimensions) {
     int startY = std::stoi(row.substr(0, row.find(' ')));
     int startX = std::stoi(row.substr(row.find(' ')));
     if (startX < 0 || startY < 0 || startY > dimensions.height ||
@@ -69,7 +98,7 @@ Position parseStartPosition(const std::string &row, Dimension dimensions){
     return {startY, startX};
 }
 
-Position parseEndPosition(const std::string &row, Dimension dimensions){
+Position parseEndPosition(const std::string &row, Dimension dimensions) {
     int endY = std::stoi(row.substr(0, row.find(' ')));
     int endX = std::stoi(row.substr(row.find(' ')));
     if (endX < 0 || endY < 0 || endY > dimensions.height || endX > dimensions.width) {
@@ -78,7 +107,7 @@ Position parseEndPosition(const std::string &row, Dimension dimensions){
     return {endY, endX};
 }
 
-std::vector<MazeEntity *> parseMazeRow(const std::string &row, Dimension dimensions, const std::string& filename){
+std::vector<MazeEntity *> parseMazeRow(const std::string &row, Dimension dimensions, const std::string &filename) {
     std::vector<MazeEntity *> rowData;
     int colIndex = 0;
     for (char entity: row) {
@@ -144,7 +173,8 @@ Maze Maze::loadFromFile(const std::string &filename) {
                 try {
                     startPoint = parseStartPosition(row, dimensions);
                 } catch (std::invalid_argument &e) {
-                    printLoadFromFileError("Beim Einlesen des Startpunktes ist ein Fehler aufgetreten.", filename, e);
+                    printLoadFromFileError("Beim Einlesen des Startpunktes ist ein Fehler aufgetreten.", filename,
+                                           e);
                 }
                 break;
             }
@@ -166,7 +196,7 @@ Maze Maze::loadFromFile(const std::string &filename) {
                     break;
                 }
 
-                data.push_back(parseMazeRow(row, dimensions ,filename));
+                data.push_back(parseMazeRow(row, dimensions, filename));
                 mazeRow++;
                 break;
         }
@@ -175,4 +205,26 @@ Maze Maze::loadFromFile(const std::string &filename) {
 
     return Maze(data, startPoint, endPoint);
 }
+
+std::ostream &operator<<(std::ostream &os, Maze &m) {
+    int r = 0;
+    for (const std::vector<MazeEntity *> &row: m.getEntities()) {
+        int c = 0;
+        for (auto entity: row) {
+            if (m.getPlayerPositionCol() == c && m.getPlayerPositionRow() == r) {
+                os << "X";
+            } else if (m.startPos.col == c && m.startPos.row == r) {
+                os << "S";
+            } else if (m.endPos.col == c && m.endPos.row == r) {
+                os << "E";
+            } else {
+                entity->print();
+            }
+            c++;
+        }
+        os << std::endl;
+        r++;
+    }
+    return os;
+};
 

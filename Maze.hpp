@@ -24,4 +24,6 @@ public:
     int getPlayerPositionRow();
 //    void saveToFile(const std::string& filename);
     static Maze loadFromFile(const std::string& filename);
+    void movePlayer(DIRECTION direction);
+    MazeEntity* getMazeEntityByPosition(Position position);
 };

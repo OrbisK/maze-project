@@ -25,11 +25,15 @@ void Player::move(DIRECTION d){
     switch(d){
         case DIRECTION::UP:
             position.row -= 1;
+            break;
         case DIRECTION::DOWN:
             position.row += 1;
+            break;
         case DIRECTION::LEFT:
             position.col -= 1;
+            break;
         case DIRECTION::RIGHT:
             position.col += 1;
+            break;
     }
 }
