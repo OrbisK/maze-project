@@ -1,11 +1,11 @@
 #include "InputHandler.hpp"
-#include<iostream>
+#include <iostream>
 #include <vector>
 #include <cstdio>
 #include <limits>
 
 GAME_INPUT InputHandler::getGameInputByUserInput(char input) {
-    switch(input){
+    switch (input) {
         case 'O':
         case 'o':
         case '8':
@@ -30,7 +30,7 @@ GAME_INPUT InputHandler::getGameInputByUserInput(char input) {
     }
 }
 
-char getCharFromInput(){
+char getCharFromInput() {
     char c = std::getchar();
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     return c;
@@ -38,7 +38,7 @@ char getCharFromInput(){
 
 void InputHandler::setOutputColor(OUTPUT_COLORS color) {
     if (std::cout.flags() & std::ios_base::fmtflags::_S_adjustfield) {
-        switch(color){
+        switch (color) {
             case OUTPUT_COLORS::DEFAULT:
                 std::cout << "\033[0m";
             case OUTPUT_COLORS::RED:
@@ -53,7 +53,7 @@ void InputHandler::setOutputColor(OUTPUT_COLORS color) {
 
 GAME_INPUT InputHandler::getGameInput() {
     GAME_INPUT input = GAME_INPUT::UNVALID_GAME_INPUT;
-    while(input == GAME_INPUT::UNVALID_GAME_INPUT){
+    while (input == GAME_INPUT::UNVALID_GAME_INPUT) {
         std::cout << "Was moechten Sie machen?" << std::endl;
         std::cout << "Bewegung:" << std::endl;
         std::cout << "[O|8]: Oben [U|2]: Unten [L|4]: Links [R|6]: Rechts" << std::endl;
@@ -63,7 +63,7 @@ GAME_INPUT InputHandler::getGameInput() {
 }
 
 MAIN_MENU_INPUT InputHandler::getMainMenuInputByUserInput(char input) {
-    switch(input){
+    switch (input) {
         case 's':
         case 'S':
             return MAIN_MENU_INPUT::START_GAME;
@@ -80,7 +80,7 @@ MAIN_MENU_INPUT InputHandler::getMainMenuInputByUserInput(char input) {
 
 MAIN_MENU_INPUT InputHandler::getMainMenuInput() {
     MAIN_MENU_INPUT input = MAIN_MENU_INPUT::UNVALID_MAIN_MENU_INPUT;
-    while(input == MAIN_MENU_INPUT::UNVALID_MAIN_MENU_INPUT){
+    while (input == MAIN_MENU_INPUT::UNVALID_MAIN_MENU_INPUT) {
         std::cout << "Hauptmenue" << std::endl;
         std::cout << "Auswahl:" << std::endl;
         std::cout << "[S]: neues Spiel starten [F]: Spiel fortsetzen [V]: Verlassen" << std::endl;

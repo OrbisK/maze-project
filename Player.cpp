@@ -1,28 +1,21 @@
 #include "Player.hpp"
 
-Player::Player(Position p): position(p) {}
+Player::Player(Position p) : position(p) {}
 
-Position Player::getPosition() {
+Position Player::getPosition()  {
     return position;
 }
-void Player::setPositionCol(int x) {
-    position.col = x;
-}
 
-void Player::setPositionRow(int y) {
-    position.row = y;
-}
-
-int Player::getPositionCol() {
+int Player::getPositionCol() const {
     return position.col;
 }
 
-int Player::getPositionRow() {
+int Player::getPositionRow() const {
     return position.row;
 }
 
-void Player::move(DIRECTION d){
-    switch(d){
+void Player::move(DIRECTION d) {
+    switch (d) {
         case DIRECTION::UP:
             position.row -= 1;
             break;

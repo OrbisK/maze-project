@@ -7,8 +7,10 @@
 #include <iostream>
 
 
-Maze::Maze(std::vector<std::vector<MazeEntity *>> &e,Dimension& d, Position &start, Position &end, Position p = {}, int initialMovesCount = 0)
-        : movesCount(initialMovesCount), startPos(start), endPos(end), entities(e), dimensions(d), player(p.col && p.row ? p : start) {
+Maze::Maze(std::vector<std::vector<MazeEntity *>> &e, Dimension &d, Position &start, Position &end, Position p = {},
+           int initialMovesCount = 0)
+        : movesCount(initialMovesCount), startPos(start), endPos(end), entities(e), dimensions(d),
+          player(p.col && p.row ? p : start) {
     if (entities[start.row][start.col]->getIsSolid() || entities[end.row][end.col]->getIsSolid()) {
         std::cout << "Start und/oder Ende darf nicht auf einem nicht betretbaren Entry liegen.";
         exit(1);
@@ -32,16 +34,12 @@ int Maze::getPlayerPositionRow() {
     return player.getPositionRow();
 }
 
-int Maze::getMovesCount() {
+int Maze::getMovesCount() const {
     return movesCount;
 }
 
 std::vector<std::vector<MazeEntity *>> Maze::getEntities() {
     return entities;
-}
-
-Player &Maze::getPlayer() {
-    return player;
 }
 
 MazeEntity *Maze::getMazeEntityByPosition(Position position) {
@@ -72,7 +70,7 @@ bool Maze::movePlayer(DIRECTION direction) {
         }
         entity = getMazeEntityByPosition(position);
         if (!entity->getIsSolid()) {
-            dynamic_cast<IVisitable*>(entity)->visit();
+            dynamic_cast<IVisitable *>(entity)->visit();
             movesCount++;
             player.move(direction);
         }
@@ -107,8 +105,8 @@ Dimension parseDimensions(const std::string &row) {
 Position parseStartPosition(const std::string &row, Dimension dimensions) {
     int startY = std::stoi(row.substr(0, row.find(' ')));
     int startX = std::stoi(row.substr(row.find(' ')));
-    if (startX < 0 || startY < 0 || startY > dimensions.height ||
-        startX > dimensions.width) {
+    if (startX < 0 || startY < 0 || startY >= dimensions.height ||
+        startX >= dimensions.width) {
         throw std::invalid_argument("Startpunkt darf nicht ausserhalb des Labyrinthes liegen.");
     }
     return {startY, startX};
@@ -117,7 +115,7 @@ Position parseStartPosition(const std::string &row, Dimension dimensions) {
 Position parseEndPosition(const std::string &row, Dimension dimensions) {
     int endY = std::stoi(row.substr(0, row.find(' ')));
     int endX = std::stoi(row.substr(row.find(' ')));
-    if (endX < 0 || endY < 0 || endY > dimensions.height || endX > dimensions.width) {
+    if (endX < 0 || endY < 0 || endY >= dimensions.height || endX >= dimensions.width) {
         throw std::invalid_argument("Endpunkt darf nicht ausserhalb des Labyrinthes liegen.");
     }
     return {endY, endX};
@@ -158,7 +156,7 @@ std::vector<MazeEntity *> parseMazeRow(const std::string &row, Dimension dimensi
     return rowData;
 }
 
-bool Maze::saveToFile(const std::string &filename) {
+void Maze::saveToFile(const std::string &filename) {
     std::ofstream file(filename); // Datei öffnen
 
     if (file.is_open()) { // Überprüfen, ob die Datei geöffnet werden konnte

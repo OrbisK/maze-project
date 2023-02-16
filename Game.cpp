@@ -122,7 +122,7 @@ void Game::resume() {
         saveFile >> level >> movesCount >> playerRow >> playerCol;
         saveFile.close();
         start(level, movesCount, {playerRow, playerCol}, true);
-    }else{
+    } else {
         restart();
     }
 }
