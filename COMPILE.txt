@@ -1,1 +1,1 @@
-g++-9 main.cpp MazeEntity.cpp MazeWall.cpp MazeFloor.cpp Maze.cpp Player.cpp InputHandler.cpp Game.cpp -o maze -std=c++2a
+g++-9 -Wall main.cpp MazeEntity.cpp MazeWall.cpp MazeFloor.cpp Maze.cpp Player.cpp InputHandler.cpp Game.cpp -o maze -std=c++2a
