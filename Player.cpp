@@ -15,6 +15,7 @@ int Player::getPositionRow() const {
 }
 
 void Player::move(DIRECTION d) {
+    // map direction to new position
     switch (d) {
         case DIRECTION::UP:
             position.row -= 1;

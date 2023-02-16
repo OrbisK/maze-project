@@ -98,14 +98,6 @@ public:
     std::vector<std::vector<MazeEntity *>> getEntities();
 
     /**
-     * Getter for player position.
-     *
-     * Returns the current position of the Player instance.
-     * @return Player position
-     */
-    Position getPlayerPosition();
-
-    /**
      * Getter for the player column.
      *
      * Returns the current column of the player.

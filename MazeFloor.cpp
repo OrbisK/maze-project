@@ -5,11 +5,7 @@ MazeFloor::MazeFloor(bool visited) : MazeEntity(FLOOR_DEFAULT_SYMBOL, false), is
 }
 
 void MazeFloor::print() const {
-    if (isVisited) {
-        std::cout << FLOOR_VISITED_SYMBOL;
-        return;
-    }
-    MazeEntity::print();
+    std::cout << getDisplaySymbol();
 }
 
 void MazeFloor::visit() {
@@ -17,6 +13,7 @@ void MazeFloor::visit() {
 }
 
 char MazeFloor::getDisplaySymbol() const {
+    // if floor is visited return '.' as symbol
     if (isVisited) {
         return FLOOR_VISITED_SYMBOL;
     }

@@ -32,27 +32,14 @@ GAME_INPUT InputHandler::getGameInputByUserInput(char input) {
 
 char getCharFromInput() {
     char c = std::getchar();
+    // removes previous input if existing
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     return c;
 }
 
-void InputHandler::setOutputColor(OUTPUT_COLORS color) {
-    if (std::cout.flags() & std::ios_base::fmtflags::_S_adjustfield) {
-        switch (color) {
-            case OUTPUT_COLORS::DEFAULT:
-                std::cout << "\033[0m";
-            case OUTPUT_COLORS::RED:
-                std::cout << "\033[31m";
-            case OUTPUT_COLORS::GREEN:
-                std::cout << "\033[32m";
-            case OUTPUT_COLORS::YELLOW:
-                std::cout << "\033[33m";
-        }
-    }
-}
-
 GAME_INPUT InputHandler::getGameInput() {
     GAME_INPUT input = GAME_INPUT::UNVALID_GAME_INPUT;
+    // loops until input is valid
     while (input == GAME_INPUT::UNVALID_GAME_INPUT) {
         std::cout << "Was moechten Sie machen?" << std::endl;
         std::cout << "Bewegung:" << std::endl;
@@ -63,6 +50,7 @@ GAME_INPUT InputHandler::getGameInput() {
 }
 
 MAIN_MENU_INPUT InputHandler::getMainMenuInputByUserInput(char input) {
+    // map char to action
     switch (input) {
         case 's':
         case 'S':
@@ -80,12 +68,12 @@ MAIN_MENU_INPUT InputHandler::getMainMenuInputByUserInput(char input) {
 
 MAIN_MENU_INPUT InputHandler::getMainMenuInput() {
     MAIN_MENU_INPUT input = MAIN_MENU_INPUT::UNVALID_MAIN_MENU_INPUT;
+    // loop until input is valid
     while (input == MAIN_MENU_INPUT::UNVALID_MAIN_MENU_INPUT) {
         std::cout << "Hauptmenue" << std::endl;
         std::cout << "Auswahl:" << std::endl;
         std::cout << "[S]: neues Spiel starten [F]: Spiel fortsetzen [V]: Verlassen" << std::endl;
         input = getMainMenuInputByUserInput(getCharFromInput());
     }
-
     return input;
 }

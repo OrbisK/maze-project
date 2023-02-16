@@ -85,15 +85,4 @@ public:
      * @return The MAIN_MENU_INPUT which can be performed.
      */
     static MAIN_MENU_INPUT getMainMenuInput();
-
-    /**
-     * Changes the color of terminal output.
-     *
-     * Changes the color of the following terminal output if the terminal supports it.
-     * Will be applied to all following output.
-     * To reset, pass OUTPUT_COLORS::DEFAULT.
-     *
-     * @param color The new terminal color.
-     */
-    static void setOutputColor(OUTPUT_COLORS color);
 };
