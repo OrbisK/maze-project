@@ -93,8 +93,8 @@ bool Game::playLevel(Maze &maze) {
 
 
 void Game::start(int level = 1, int movesCount = 0, Position p = {}, bool saved = false) {
-    bool levelFinished = false;
     while (levelExists(level, saved)) {
+        bool levelFinished = false;
         Maze maze = Maze::loadFromFile(getLevelPath(level, saved), movesCount, p);
         levelFinished = playLevel(maze);
         movesCount += maze.getMovesCount();
@@ -104,6 +104,8 @@ void Game::start(int level = 1, int movesCount = 0, Position p = {}, bool saved 
             return Game::save(maze, level, movesCount);
         }
         level++;
+        saved = false;
+        p = {};
     }
     handleGameFinished(movesCount);
 }
@@ -126,6 +128,7 @@ void Game::resume() {
 }
 
 void Game::save(Maze &maze, int level, int movesCount) {
+    clearSavedFiles();
     std::ofstream save("levels/save.txt"); // Datei öffnen
 
     if (save.is_open()) { // Überprüfen, ob die Datei geöffnet werden konnte
