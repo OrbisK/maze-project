@@ -20,6 +20,13 @@ enum MAIN_MENU_INPUT{
     UNVALID_MAIN_MENU_INPUT
 };
 
+enum OUTPUT_COLORS {
+    GREEN,
+    YELLOW,
+    RED,
+    DEFAULT
+};
+
 class InputHandler {
 
 private:
@@ -28,4 +35,5 @@ private:
 public:
     static GAME_INPUT getGameInput();
     static MAIN_MENU_INPUT getMainMenuInput();
+    static void setOutputColor(OUTPUT_COLORS color);
 };

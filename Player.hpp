@@ -19,7 +19,7 @@ private:
     void setPositionCol(int x);
     void setPositionRow(int y);
 public:
-    Player(int x, int y);
+    Player(Position p);
     Position getPosition();
     int getPositionCol();
     int getPositionRow();

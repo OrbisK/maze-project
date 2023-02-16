@@ -36,6 +36,21 @@ char getCharFromInput(){
     return c;
 }
 
+void InputHandler::setOutputColor(OUTPUT_COLORS color) {
+    if (std::cout.flags() & std::ios_base::fmtflags::_S_adjustfield) {
+        switch(color){
+            case OUTPUT_COLORS::DEFAULT:
+                std::cout << "\033[0m";
+            case OUTPUT_COLORS::RED:
+                std::cout << "\033[31m";
+            case OUTPUT_COLORS::GREEN:
+                std::cout << "\033[32m";
+            case OUTPUT_COLORS::YELLOW:
+                std::cout << "\033[33m";
+        }
+    }
+}
+
 GAME_INPUT InputHandler::getGameInput() {
     GAME_INPUT input = GAME_INPUT::UNVALID_GAME_INPUT;
     while(input == GAME_INPUT::UNVALID_GAME_INPUT){

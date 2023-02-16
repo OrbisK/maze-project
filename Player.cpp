@@ -1,6 +1,6 @@
 #include "Player.hpp"
 
-Player::Player(int col, int row): position({row, col}) {}
+Player::Player(Position p): position(p) {}
 
 Position Player::getPosition() {
     return position;

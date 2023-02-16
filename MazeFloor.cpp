@@ -19,3 +19,10 @@ void MazeFloor::print() const {
 void MazeFloor::visit(){
     isVisited = true;
 }
+
+char MazeFloor::getDisplaySymbol() const {
+    if(isVisited){
+        return FLOOR_VISITED_SYMBOL;
+    }
+    return MazeEntity::getDisplaySymbol();
+}

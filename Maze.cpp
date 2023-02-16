@@ -6,14 +6,9 @@
 #include <string>
 #include <iostream>
 
-template<typename Base, typename T>
-inline bool instanceof(const T *ptr) {
-    return dynamic_cast<const Base*>(ptr) != nullptr;
-}
 
-Maze::Maze(std::vector<std::vector<MazeEntity *>> &e, Position &start, Position &end, int initialMovesCount = 0)
-        : movesCount(initialMovesCount), player(
-        start.col, start.row), startPos(start), endPos(end), entities(e) {
+Maze::Maze(std::vector<std::vector<MazeEntity *>> &e,Dimension& d, Position &start, Position &end, Position p = {}, int initialMovesCount = 0)
+        : movesCount(initialMovesCount), startPos(start), endPos(end), entities(e), dimensions(d), player(p.col && p.row ? p : start) {
     if (entities[start.row][start.col]->getIsSolid() || entities[end.row][end.col]->getIsSolid()) {
         std::cout << "Start und/oder Ende darf nicht auf einem nicht betretbaren Entry liegen.";
         exit(1);
@@ -77,7 +72,7 @@ bool Maze::movePlayer(DIRECTION direction) {
         }
         entity = getMazeEntityByPosition(position);
         if (!entity->getIsSolid()) {
-            dynamic_cast<MazeFloor*>(entity)->visit();
+            dynamic_cast<IVisitable*>(entity)->visit();
             movesCount++;
             player.move(direction);
         }
@@ -163,7 +158,31 @@ std::vector<MazeEntity *> parseMazeRow(const std::string &row, Dimension dimensi
     return rowData;
 }
 
-Maze Maze::loadFromFile(const std::string &filename, int initialMoves = 0) {
+bool Maze::saveToFile(const std::string &filename) {
+    std::ofstream file(filename); // Datei öffnen
+
+    if (file.is_open()) { // Überprüfen, ob die Datei geöffnet werden konnte
+        file << dimensions.height << " " << dimensions.width << std::endl;
+        file << startPos.row << " " << startPos.col << std::endl;
+        file << endPos.row << " " << endPos.col << std::endl;
+        int r = 0;
+        for (const std::vector<MazeEntity *> &row: getEntities()) {
+            int c = 0;
+            for (auto entity: row) {
+                file << entity->getDisplaySymbol();
+                c++;
+            }
+            file << std::endl;
+            r++;
+        }
+        file.close(); // Datei schließen
+        std::cout << "Text wurde erfolgreich in die Datei geschrieben." << std::endl;
+    } else {
+        std::cout << "Datei konnte nicht geöffnet werden." << std::endl;
+    }
+}
+
+Maze Maze::loadFromFile(const std::string &filename, int initialMoves = 0, Position p = {}) {
     std::ifstream file(filename);
     std::string row;
     int lineNumber = 1;
@@ -223,7 +242,7 @@ Maze Maze::loadFromFile(const std::string &filename, int initialMoves = 0) {
         lineNumber++;
     }
 
-    return Maze(data, startPoint, endPoint, initialMoves);
+    return Maze(data, dimensions, startPoint, endPoint, p, initialMoves);
 }
 
 std::ostream &operator<<(std::ostream &os, Maze &m) {
@@ -232,11 +251,11 @@ std::ostream &operator<<(std::ostream &os, Maze &m) {
         int c = 0;
         for (auto entity: row) {
             if (m.getPlayerPositionCol() == c && m.getPlayerPositionRow() == r) {
-                os << "X";
+                os << 'X';
             } else if (m.startPos.col == c && m.startPos.row == r) {
-                os << "S";
+                os << 'S';
             } else if (m.endPos.col == c && m.endPos.row == r) {
-                os << "E";
+                os << 'E';
             } else {
                 entity->print();
             }

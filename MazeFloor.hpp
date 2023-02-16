@@ -5,12 +5,13 @@ const char FLOOR_DEFAULT_SYMBOL = ' ';
 const char FLOOR_VISITED_SYMBOL = '.';
 
 
-class MazeFloor : public MazeEntity {
+class MazeFloor : public MazeEntity, public IVisitable{
 private:
     bool isVisited;
 public:
     explicit MazeFloor(bool isVisited);
     bool getIsVisited() const;
     void print() const override;
-    void visit();
+    char getDisplaySymbol() const override;
+    void visit() override;
 };

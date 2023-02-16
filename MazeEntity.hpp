@@ -2,6 +2,11 @@
 
 #include <string>
 
+class IVisitable {
+public:
+    virtual void visit() = 0;
+};
+
 class MazeEntity {
 private:
     bool isSolid;
@@ -9,7 +14,7 @@ private:
 public:
     bool getIsSolid() const;
     void setDisplaySymbol(char symbol);
-    char getDisplaySymbol() const;
+    virtual char getDisplaySymbol() const;
 
     virtual void print() const;
     MazeEntity(char symbol, bool solid);

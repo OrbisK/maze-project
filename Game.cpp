@@ -13,10 +13,9 @@ void Game::play() {
     switch (mainMenu) {
         case MAIN_MENU_INPUT::START_GAME:
             restart();
-//            TODO: spiel Starten
             break;
         case MAIN_MENU_INPUT::RESUME_GAME:
-            // TODO: Spiel fortsetzen!
+            resume();
             break;
         case MAIN_MENU_INPUT::CUSTOM_GAME:
             // TODO: Eigenes Level starten
@@ -41,16 +40,28 @@ const std::string saveFilePath = "levels/save.txt";
 
 
 void Game::clearSavedFiles() {
-    int level, moves;
+    int level;
     std::ifstream saveFile(saveFilePath);
     if (saveFile.is_open()) {
-        saveFile >> level >> moves;
+        saveFile >> level;
         saveFile.close();
         std::string s = getLevelPath(level, true);
         std::remove("levels/save.txt");
         std::remove(s.c_str());
     }
 
+}
+
+void Game::handleGameFinished(int moves) {
+    InputHandler::setOutputColor(OUTPUT_COLORS::GREEN);
+    std::cout << "Alle Level abgeschlossen" << std::endl;
+    InputHandler::setOutputColor(OUTPUT_COLORS::DEFAULT);
+    std::cout << "Anzahl benoetigte Bewegungen: ";
+    InputHandler::setOutputColor(OUTPUT_COLORS::YELLOW);
+    std::cout << moves << std::endl;
+    InputHandler::setOutputColor(OUTPUT_COLORS::DEFAULT);
+    clearSavedFiles();
+    play();
 }
 
 bool Game::playLevel(Maze &maze) {
@@ -80,25 +91,49 @@ bool Game::playLevel(Maze &maze) {
     return true;
 }
 
-void Game::restart() {
-    clearSavedFiles();
-    int level = 1;
-    int movesCount = 0;
+
+void Game::start(int level = 1, int movesCount = 0, Position p = {}, bool saved = false) {
     bool levelFinished = false;
-    while (levelExists(level, false)) {
-        Maze maze = Maze::loadFromFile(getLevelPath(level, false), movesCount);
+    while (levelExists(level, saved)) {
+        Maze maze = Maze::loadFromFile(getLevelPath(level, saved), movesCount, p);
         levelFinished = playLevel(maze);
         movesCount += maze.getMovesCount();
-        if(levelFinished){
+        if (levelFinished) {
             std::cout << "Level gewonnen" << std::endl;
-        }else{
+        } else {
             return Game::save(maze, level, movesCount);
         }
         level++;
     }
+    handleGameFinished(movesCount);
 }
 
-void Game::save(Maze& maze, int level, int movesCount) {
-    std::cout << movesCount;
-    // save moves count. save last unfinished level
+void Game::restart() {
+    clearSavedFiles();
+    start();
+}
+
+void Game::resume() {
+    int level, movesCount, playerRow, playerCol;
+    std::ifstream saveFile(saveFilePath);
+    if (saveFile.is_open()) {
+        saveFile >> level >> movesCount >> playerRow >> playerCol;
+        saveFile.close();
+        start(level, movesCount, {playerRow, playerCol}, true);
+    }else{
+        restart();
+    }
+}
+
+void Game::save(Maze &maze, int level, int movesCount) {
+    std::ofstream save("levels/save.txt"); // Datei öffnen
+
+    if (save.is_open()) { // Überprüfen, ob die Datei geöffnet werden konnte
+        save << level << " " << movesCount << " " << maze.getPlayerPositionRow() << " " << maze.getPlayerPositionCol();
+        save.close(); // Datei schließen
+    } else {
+        std::cout << "Fortschritt konnte nicht gespeichtert werden" << std::endl; // Handle error
+        return;
+    }
+    maze.saveToFile(getLevelPath(level, true));
 }
