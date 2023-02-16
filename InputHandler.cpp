@@ -42,8 +42,9 @@ GAME_INPUT InputHandler::getGameInput() {
     // loops until input is valid
     while (input == GAME_INPUT::UNVALID_GAME_INPUT) {
         std::cout << "Was moechten Sie machen?" << std::endl;
+        std::cout << "Sie sind das X und muessen zum E" << std::endl;
         std::cout << "Bewegung:" << std::endl;
-        std::cout << "[O|8]: Oben [U|2]: Unten [L|4]: Links [R|6]: Rechts" << std::endl;
+        std::cout << "[O|8]: Oben [U|2]: Unten [L|4]: Links [R|6]: Rechts [S]: Speichern" << std::endl;
         input = getGameInputByUserInput(getCharFromInput());
     }
     return input;

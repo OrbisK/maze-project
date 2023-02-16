@@ -1,0 +1,15 @@
+Um das Programm zu testen muss es eigentlich nur gestartet werden.
+
+Ein möglicher Testablauf könnte wie folgt aussehen:
+1. Compile.txt ausführen
+2. ./maze ausführen
+3. Spiel mit F aus dem Hauptmenü starten
+4. Legale und nicht legale Bewegungen (2, 4, 8, 6) ausführen, ohne das Ziel zu erreichen.
+5. Den Spielstand mit S speichern.
+6. ./maze erneut ausführen
+7. Spiel mit F fortsetzen
+8. 4-5 beliebig of wiederholen.
+9. Das Ende erreichen.
+10. Im nächsten Level Schritte 4-9 ausführen.
+11. Nachdem das Spiel gewonnen ist, können Sie auch eigene Level als `levels/<i>.txt` (<i> sollte dabei fortlaufen ab 2 nummeriert sein). Dabei dürfen auch Level mit ungültigen Metadaten getestet werden.
+(12). Dafür kann die test.3.txt in 3.txt (oder 1.txt) umbenannt werden.
